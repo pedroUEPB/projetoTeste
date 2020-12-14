@@ -1,0 +1,31 @@
+.btnAl {
+    margin-left: 5px;
+    display: block;
+    min-width: 120px;
+    border: none;
+    background: #39b7dd;
+    align-self: center;
+    margin: auto;
+    margin-top: 10px;
+    padding: 15px;
+    border-radius: 5px;
+    color: #fff;
+    cursor: pointer;
+    text-transform: uppercase;
+}
+
+.btnPr {
+    margin-right: 5px;
+    display: block;
+    min-width: 120px;
+    border: none;
+    background: #39b7dd;
+    align-self: center;
+    margin: auto;
+    margin-top: 10px;
+    padding: 15px;
+    border-radius: 5px;
+    color: #fff;
+    cursor: pointer;
+    text-transform: uppercase;
+}
