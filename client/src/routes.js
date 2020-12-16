@@ -1,5 +1,5 @@
 import React from 'react';
-import {Router, Switch, Route} from 'react-router';
+import {Router, Switch, Route,} from 'react-router';
 import {history} from './components/history';
 
 import About from './components/pages/About'
@@ -15,10 +15,17 @@ import ListaProjetos from './components/pages/ListaProjetos'
 
 import './components/pages/About/styleAbout.css';
 import './components/pages/Lista/styleLista.css';
+const initialState = {
+    email: 'demetrio@gmail.com',
+    password: '123456'
+}
 
 
 //<Route path="/" exact component={List} />
 function Routes(){
+
+    
+
 
     return(
         <Router history={history}>

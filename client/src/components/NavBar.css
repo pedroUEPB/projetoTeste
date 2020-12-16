@@ -14,7 +14,7 @@
 .nav-menu {
     background-color: rgba(0,0,0,0.8);
     width: 200px;
-    height: 50vh;
+    height: 60vh;
     display: flex;
     justify-content: center;
     position: fixed;
@@ -25,7 +25,7 @@
 
 .nav-menu.active{
     left: 0;
-    transition: 350ms;
+    transition: 400ms;
 }
 
 .nav-text {
@@ -68,4 +68,8 @@
 
 span {
     margin-left: 10px;
+}
+
+.btnSair {
+    margin-left: 1000%;
 }

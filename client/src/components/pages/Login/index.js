@@ -1,44 +1,35 @@
 import React, { useState } from 'react';
-import axios from 'axios';
-import { Formik, Field, ErrorMessage } from 'formik';
 
-const dataGG = {
-    login: 'demetrio',
-    senha: 'demetrio',
-    tipoUser:'professor'
+import { Formik, ErrorMessage } from 'formik';
+import { useHistory } from 'react-router-dom';
+
+const initialState = {
+    email: '',
+    password: ''
+
 }
 
 const Login = () => {
 
-    const [login, setLogin] = useState('');
-    const [senha, setSenha] = useState('');
-
-    const onChangeLogin = (e) => {
-        setLogin(e.target.value);
+    const [dadosLogin, setLogin] = useState(initialState);
+    const history = useHistory();
+    
+    const onChange = (e) => {
+        setLogin({
+            ...dadosLogin,
+            [e.target.name]:e.target.value
+        });
     }
     
-    const onChangeSenha = (e) => {
-        setSenha(e.target.value);
-    }
 
-    const validateLogin = (value) => {
-        let error;
-        if (!value) {
-            error = "Login é obrigatório!";
-        }
-        return error;
-    }
-
-    const validateSenha = (value) => {
-        let error;
-        if (!value) {
-            error = "Senha é obrigatória!";
-        }
-        return error;
+    function EnviaDados(){
+        localStorage.setItem("user",JSON.stringify(dadosLogin))
+        
+        history.push('/listaprojetos')
     }
     
     const handleSubmitting = async (values, { setSubmitting }) => {
-        console.log(JSON.stringify(values));
+        
         /*try {
             const dados = await axios({
                 url: "http://localhost:3001/login",
@@ -58,6 +49,10 @@ const Login = () => {
         }*/
     }
 
+    function toCadastro(){
+        history.push("/cadastro");
+    }
+
     return(
         <Formik initialValues = {{user: '', password: '', tipoUser: 'professor'/*props.tipoUser*/}} 
         onSubmit={handleSubmitting} render={({ handleChange, handleBlur, handleSubmit, isSubmitting }) => (
@@ -70,26 +65,19 @@ const Login = () => {
                             </h1>
                         </div>
                         <div className="register-fields">
-                            <Field type="text" className="input" name="login" placeholder="Login" autoComplete="off"
-                                validate={validateLogin}
-                                onBlur={handleBlur}
-                                onChange={handleChange}
-                            />
+                            <input onChange={onChange} value={dadosLogin.email} className="input" type="text" name="email" placeholder="Insira seu E-mail"/>
                             <div className="error-message">
                                 <ErrorMessage name="login" />
                             </div>
 
-                            <Field type="password" className="input" name="password" placeholder="Senha" autoComplete="off"
-                                validate={validateSenha}
-                                onBlur={handleBlur}
-                                onChange={handleChange}
-                            />
+                           
                             <div className="error-message">
+                            <input  onChange={onChange} value={dadosLogin.password} className="input" type="password" name="password" placeholder="Insira sua senha"/>
                                 <ErrorMessage name="password" />
                             </div>
                         </div>
-                        <input type="submit" className="btn" value="Logar" disable={isSubmitting} />
-                        <input type="submit" className="btn" value="Cadastrar"/>
+                        <input type="submit" className="btn" value="Logar" onClick={EnviaDados} />
+                        <input type="submit" className="btn" value="Cadastrar" onClick={toCadastro}/>
                     </div>
                 </div>
             </form>

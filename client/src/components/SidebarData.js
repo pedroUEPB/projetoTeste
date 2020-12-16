@@ -27,5 +27,11 @@ export const SideBarData = [
         path: '/about',
         icon: <IoIcons.IoMdHelpCircle />,
         cName: 'nav-text'
+    },
+    {
+        title: 'Sair',
+        path: '/',
+        icon: <FaIcons.FaSignInAlt />,
+        cName: 'nav-text'
     }
 ]

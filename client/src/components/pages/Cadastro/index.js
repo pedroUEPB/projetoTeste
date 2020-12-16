@@ -1,5 +1,5 @@
 import { Formik, Field, ErrorMessage } from 'formik';
-import React from 'react';
+import React, { useState } from 'react';
 import MaskedInput from 'react-text-mask';
 import cepMask from './cepMask';
 import cpfNumberMask from './cpfMask';
@@ -7,103 +7,150 @@ import matriculaMask from './matriculaMask';
 import '../../../style.css';
 import axios from 'axios';
 
-const dadosEnvio = {
-    cep: '58433-553',
-    endereco: 'Rua Severino Matias da Silva',
-    bairro: 'Malvinas',
-    cidade: 'Campina Grande',
-    numero: '12',
-    complemento: 'asd',
-    uf: 'PB'
+const initialStatePessoa = {
+    nome: '',
+    idade: '',
+    cpf: '',
+    cep: '',
+    endereco: '',
+    bairro: '',
+    cidade: '',
+    numero: '',
+    complemento: '',
+    uf: ''
+}
+const initialStateUser = {
+    matricula: '',
+    curso: '',
+    usuario: '',
+    senha: ''
 }
 
 const Cadastro = () => {
-    const validateNome = (value) => {
+    const [pessoa, setPessoa] = useState(initialStatePessoa);
+    const [user, setUser] = useState(initialStateUser);
+
+    const validateNome = () => {
         let error;
-        if (!value) {
+        if (!pessoa.nome) {
             error = "Nome é obrigatório!";
         }
         return error;
     }
 
-    const validateIdade = (value) => {
+    const validateIdade = () => {
         let error;
-        if (!value) {
+        if (!pessoa.idade) {
             error = "Idade é obrigatória!";
         }
-        if (parseInt(value) < 17) {
+        if (parseInt(pessoa.idade) < 17) {
             error = "Precisa ser maior que 16 anos!"
         }
         return error;
     }
 
-    const validateCPF = (value) => {
+    const validateCPF = () => {
         let error;
-        if (!value) {
+        if (!pessoa.cpf) {
             error = "CPF é obrigatório!";
         }
         return error;
     }
 
-    const validateMatricula = (value) => {
+    const validateMatricula = () => {
         let error;
-        if (!value) {
+        if (!user.matricula) {
             error = "Matricula é obrigatória!";
         }
         return error;
     }
 
-    const validateCurso = (value) => {
+    const validateCurso = () => {
         let error;
-        if (!value) {
+        if (!user.curso) {
             error = "Curso é obrigatório!";
         }
         return error;
     }
 
-    const validateCep = (value) => {
+    const validateCep = () => {
         let error;
-        if (!value) {
+        if (!pessoa.cep) {
             error = "CEP é obrigatório!";
         }
         return error;
     }
 
-    const validateEndereco = (value) => {
+    const validateEndereco = () => {
         let error;
-        if (!value) {
+        if (!pessoa.endereco) {
             error = "Endereço é obrigatório!";
         }
         return error;
     }
 
-    const validateBairro = (value) => {
+    const validateBairro = () => {
         let error;
-        if (!value) {
+        if (!pessoa.bairro) {
             error = "Bairro é obrigatório!";
         }
         return error;
     }
 
-    const validateCidade = (value) => {
+    const validateCidade = () => {
         let error;
-        if (!value) {
+        if (!pessoa.cidade) {
             error = "Cidade é obrigatória!";
         }
         return error;
     }
 
-    const onBlurCep = (e, setFieldValue) => {
-        const { value } = e.target;
-        const cep = value?.replace(/[^0-9]/g, '');
+    const validateUsuario = () => {
+        let error;
+        if (!user.usuario) {
+            error = "Usuário é obrigatória!";
+        }
+        return error;
+    }
 
-        if (cep?.length !== 8) {
+    const validateSenha = () => {
+        let error;
+        if (!user.senha) {
+            error = "Senha é obrigatória!";
+        }
+        return error;
+    }
+
+    const onChangePessoa = (e) => {
+        setPessoa({
+            ...pessoa,
+            [e.target.name]:e.target.value
+        });
+        //console.log(dadosEnvio);
+    }
+
+    const onChangeUser = (e) => {
+        setUser({
+            ...user,
+            [e.target.name]:e.target.value
+        });
+        //console.log(dadosEnvio);
+    }
+
+    const onBlurCep = (e, setFieldValue) => {
+        const cep = e.target.value;
+
+        if (cep?.length !== 9) {
             return;
         }
 
         fetch(`https://viacep.com.br/ws/${cep}/json/`)
             .then((res) => res.json())
             .then((data) => {
+                pessoa.bairro = data.bairro;
+                pessoa.cidade = data.localidade;
+                pessoa.endereco = data.logradouro;
+                pessoa.uf = data.uf
                 setFieldValue('bairro', data.bairro);
                 setFieldValue('cidade', data.localidade);
                 setFieldValue('endereco', data.logradouro);
@@ -113,16 +160,27 @@ const Cadastro = () => {
     }
 
     const handleSubmitting = async (values, { setSubmitting }) => {
+        var url;
+        //console.log(user);
+        //console.log(pessoa);
+        if(localStorage.getItem('tipoUser') == "Professor"){
+            url = "http://localhost:3001/cadastroprofessor"
+        } else {
+            console.log('entrou em aluno')
+            url = "http://localhost:3001/cadastroaluno"
+        }
+        
         try{
             const dados = await axios({
-                url: "http://localhost:3001/cadastrar",
+                url: url,
                 method: 'POST',
                 headers: {
                     "Accept": "application/json",
-                    "Content-Type": "application/json",
+                    "Content-Type": "application/json"
                 },
-                data:JSON.stringify(dadosEnvio)
+                data:JSON.stringify({user, pessoa})
             })
+            
             console.log(dados.config.data, dados.data);
         } catch (err) {
             console.log(err);
@@ -131,36 +189,28 @@ const Cadastro = () => {
 
     return (
         <Formik initialValues={{
-            nome: '',
-            idade: '',
-            cpf: '',
-            matricula: '',
-            curso: '',
             endereco: '',
-            numero: '',
-            complemento: '',
             bairro: '',
             cidade: '',
-            uf: '',
-            cep: ''
-        }} onSubmit={handleSubmitting} render={({ handleChange, handleBlur, handleSubmit, isSubmitting, setFieldValue }) => (
+            uf: ''
+        }} onSubmit={handleSubmitting} render={({handleBlur, handleSubmit, isSubmitting, setFieldValue }) => (
             <form onSubmit={handleSubmit}>
                 <div className="wrapper">
                     <div className="reg-form" onSubmit={handleSubmit}>
                         <div className="register-fields">
-                            <Field type="text" className="input" name="nome" placeholder="Nome completo*" autoComplete="off"
+                            <Field type="text" className="input" value={pessoa.nome} name="nome" placeholder="Nome completo*" autoComplete="off"
                                 validate={validateNome}
                                 onBlur={handleBlur}
-                                onChange={handleChange}
+                                onChange={onChangePessoa}
                             />
                             <div className="error-message">
                                 <ErrorMessage name="nome" />
                             </div>
 
-                            <Field type="number" className="input" name="idade" placeholder="Idade*" autoComplete="off"
+                            <Field type="number" className="input" value={pessoa.idade} name="idade" placeholder="Idade*" autoComplete="off"
                                 validate={validateIdade}
                                 onBlur={handleBlur}
-                                onChange={handleChange}
+                                onChange={onChangePessoa}
                             />
                             <div className="error-message">
                                 <ErrorMessage name="idade" />
@@ -168,12 +218,13 @@ const Cadastro = () => {
 
                             <Field type="number" name="cpf"
                                 validate={validateCPF}
-                                onBlur={handleBlur}
-                                onChange={handleChange}
                                 render={({ field }) => (
                                     <MaskedInput {...field}
+                                        onChange={onChangePessoa}
+                                        onBlur={handleBlur}
                                         mask={cpfNumberMask}
                                         className="input"
+                                        value={pessoa.cpf}
                                         placeholder="CPF*"
                                         autoComplete="off"
 
@@ -190,11 +241,12 @@ const Cadastro = () => {
                                     <MaskedInput {...field}
                                         mask={matriculaMask}
                                         className="input"
+                                        value={user.matricula}
                                         placeholder="Matricula*"
                                         autoComplete="off"
                                         validate={validateMatricula}
                                         onBlur={handleBlur}
-                                        onChange={handleChange}
+                                        onChange={onChangeUser}
                                     />
                                 )}
 
@@ -203,10 +255,10 @@ const Cadastro = () => {
                                 <ErrorMessage name="matricula" className="error-message" />
                             </div>
                             
-                            <Field type="text" className="input" name="curso" placeholder="Curso*" autoComplete="off"
+                            <Field type="text" className="input" value={user.curso} name="curso" placeholder="Curso*" autoComplete="off"
                                 validate={validateCurso}
                                 onBlur={handleBlur}
-                                onChange={handleChange}
+                                onChange={onChangeUser}
                             />
                             <div className="error-message">
                                 <ErrorMessage name="curso" />
@@ -219,8 +271,9 @@ const Cadastro = () => {
                                         mask={cepMask}
                                         validate={validateCep}
                                         onBlur={(e) => onBlurCep(e, setFieldValue)}
-                                        onChange={handleChange}
+                                        onChange={onChangePessoa}
                                         className="input"
+                                        value={pessoa.cep}
                                         placeholder="CEP*"
                                         autoComplete="off"
                                     />
@@ -230,38 +283,38 @@ const Cadastro = () => {
                                 <ErrorMessage name="cep" />
                             </div>
 
-                            <Field type="text" className="input" name="endereco" placeholder="Endereço*" autoComplete="off"
+                            <Field type="text" className="input" value={pessoa.endereco} name="endereco" placeholder="Endereço*" autoComplete="off"
                                 validate={validateEndereco}
                                 onBlur={handleBlur}
-                                onChange={handleChange}
+                                onChange={onChangePessoa}
                             />
                             <div className="error-message">
                                 <ErrorMessage name="endereco" />
                             </div>
 
-                            <Field type="text" className="input" name="bairro" placeholder="Bairro*" autoComplete="off"
+                            <Field type="text" className="input" value={pessoa.bairro} name="bairro" placeholder="Bairro*" autoComplete="off"
                                 validate={validateBairro}
                                 onBlur={handleBlur}
-                                onChange={handleChange}
+                                onChange={onChangePessoa}
                             />
                             <div className="error-message">
                                 <ErrorMessage name="bairro" />
                             </div>
 
-                            <Field type="text" className="input" name="cidade" placeholder="Cidade*" autoComplete="off"
+                            <Field type="text" className="input" value={pessoa.cidade} name="cidade" placeholder="Cidade*" autoComplete="off"
                                 validate={validateCidade}
                                 onBlur={handleBlur}
-                                onChange={handleChange}
+                                onChange={onChangePessoa}
                             />
                             <div className="error-message">
                                 <ErrorMessage name="cidade" />
                             </div>
 
-                            <input type="text" className="input" name="numero" placeholder="Número" autoComplete="off" onChange={handleChange} />
-                            <input type="text" className="input" name="complemento" placeholder="Complemento" autoComplete="off" onChange={handleChange} />
+                            <input type="text" className="input" value={pessoa.numero} name="numero" placeholder="Número" autoComplete="off" onChange={onChangePessoa} />
+                            <input type="text" className="input" value={pessoa.complemento} name="complemento" placeholder="Complemento" autoComplete="off" onChange={onChangePessoa} />
                             
                             <div className="select">
-                                <Field component="select" className="   " name="uf">
+                                <Field component="select" className="   " value={pessoa.uf} name="uf" onChange={onChangePessoa}>
                                     <option value={"AC"}>AC</option>
                                     <option value={"AL"}>AL</option>
                                     <option value={"AP"}>AP</option>
@@ -291,6 +344,25 @@ const Cadastro = () => {
                                     <option value={"TO"}>TO</option>
                                 </Field>
                             </div>
+                            
+                            <Field type="text" className="input" value={user.usuario} name="usuario" placeholder="Usuário*" autoComplete="off"
+                                validate={validateUsuario}
+                                onBlur={handleBlur}
+                                onChange={onChangeUser}
+                            />
+                            <div className="error-message">
+                                <ErrorMessage name="endereco" />
+                            </div>
+
+                            <Field type="password" className="input" value={user.senha} name="senha" placeholder="Senha*" autoComplete="off"
+                                validate={validateSenha}
+                                onBlur={handleBlur}
+                                onChange={onChangeUser}
+                            />
+                            <div className="error-message">
+                                <ErrorMessage name="endereco" />
+                            </div>
+
                         </div>
                         <input type="submit" className="btn" value="Cadastrar" disable={isSubmitting} />
                     </div>
