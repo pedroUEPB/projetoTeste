@@ -63,6 +63,64 @@ module.exports = {
         });
         
         res.json(dadosPessoa)
+    },
+    //deletar professor por id
+    async deleteProfessor(req, res){
+        const professor = await Professor.findByPk(req.body.id);
+        const pess = await Pessoa.findByPk(req.body.fk_pessoa);
+        await Professor.destroy(professor);
+        if(!professor){
+            return res.status(400).json({
+                Error:['Não foi possivel deletar o projeto']
+            })
+        }
+        await Pessoa.destroy(pess);
+        return res.status(200).json({
+            Sucess:['Removido com sucesso']
+        })
+    },
+    //put professor
+    async changeProfessor(req, res){
+        const {user, pessoa} = req.body;
+        const professor = await Professor.findByPk(user.id);
+        const pess = await Pessoa.findByPk(pessoa.id);
+        await professor.save(user);
+        if(!professor){
+            return res.status(400).json({
+                Error:['Não foi possivel editar o aluno']
+            })
+        }
+        await pess.save(pessoa);
+        return res.status(200).json()
+    },
+    //deletar aluno por id
+    async deleteAluno(req, res){
+        const aluno = await Aluno.findByPk(req.body.id);
+        const pessoa = await Pessoa.findByPk(req.body.fk_pessoa);
+        await aluno.destroy();
+        await pessoa.destroy();
+        if(!aluno){
+            return res.status(400).json({
+                Error:['Não foi possivel deletar o aluno']
+            })
+        }
+        return res.status(200).json({
+            Sucess:['Removido com sucesso']
+        })
+    },
+    //put aluno
+    async changeAluno(req, res){
+        const {user, pessoa} = req.body;
+        const aluno = await Aluno.findByPk(user.id);
+        const pess = await Pessoa.findByPk(pessoa.id);
+        await aluno.save(user);
+        if(!aluno){
+            return res.status(400).json({
+                Error:['Não foi possivel editar o aluno']
+            })
+        }
+        await pess.save(pessoa);
+        return res.status(200).json(aluno)
     }
 
 

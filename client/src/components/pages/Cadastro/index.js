@@ -163,7 +163,7 @@ const Cadastro = () => {
         var url;
         //console.log(user);
         //console.log(pessoa);
-        if(localStorage.getItem('tipoUser') == "Professor"){
+        if(localStorage.getItem('tipoUser') === "Professor"){
             url = "http://localhost:3001/cadastroprofessor"
         } else {
             console.log('entrou em aluno')
