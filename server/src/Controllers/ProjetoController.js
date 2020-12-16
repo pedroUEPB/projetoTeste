@@ -18,24 +18,24 @@ module.exports = {
         return res.status(200).json(dadosProjeto);
     },
 
-    async index(req, res){
+    async index(req, res) {
         const projetos = await Projeto.findAll();
-        if(!projetos){
+        if (!projetos) {
             return res.status(400).json({
-                Error:['Nenhum projeto cadastrado']
+                Error: ['Nenhum projeto cadastrado']
             })
         }
         return res.status(200).json(projetos);
     },
 
     //pegar projetos do professor
-    async indexProfessor(req, res){
-        const {fk_prof} = req.body;
+    async indexProfessor(req, res) {
+        const { fk_prof } = req.body;
         //console.log(fk_prof);
         const projetos = await Projeto.findAll({
             where: { fk_professor: fk_prof }
         });
-        if(!projetos){
+        if (!projetos) {
             return res.status(400).json({
                 Error: ['Nenhum projeto encontrado']
             })
@@ -43,7 +43,7 @@ module.exports = {
         return res.status(200).json(projetos);
     },
     //deletar projeto por id
-    async delete(req, res){
+    async delete(req, res) {
         const projeto = await Projeto.findByPk(req.body.id);
         /*const cadastrosAl = await CadastroAluno.findAll({
             where: {fk_projeto: projeto.id}
@@ -54,22 +54,22 @@ module.exports = {
             })
         }*/
         await projeto.destroy();
-        if(!projeto){
+        if (!projeto) {
             return res.status(400).json({
-                Error:['Não foi possivel deletar o projeto']
+                Error: ['Não foi possivel deletar o projeto']
             })
         }
         return res.status(200).json({
-            Sucess:['Removido com sucesso']
+            Sucess: ['Projeto removido com sucesso']
         })
     },
     //put projeto
-    async change(req, res){
+    async change(req, res) {
         const projeto = await Projeto.findByPk(req.body.id);
         await projeto.save(req.body);
-        if(!projeto){
+        if (!projeto) {
             return res.status(400).json({
-                Error:['Não foi possivel editar o projeto']
+                Error: ['Não foi possivel editar o projeto']
             })
         }
         return res.status(200).json(projeto)
