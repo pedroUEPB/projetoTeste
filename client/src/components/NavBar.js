@@ -38,9 +38,7 @@ function NavBar() {
                         })}
                     </ul>
                 </nav>
-                <div className="">
-
-                </div>
+                
             </IconContext.Provider>
         </>
     )

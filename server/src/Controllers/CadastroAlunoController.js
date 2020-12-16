@@ -1,7 +1,7 @@
 const CadAluno = require('../models/ModelCadAluno');
-const Professor = require('../models/ModelProfessor');
 const Aluno = require('../models/ModelAluno');
 const CadAlunos = require('../models/ModelCadAluno');
+const Projeto = require('../models/ModelProjeto');
 module.exports = {
     async store(req,res){
         const {idProj, matric, form} = req.body;
@@ -22,20 +22,21 @@ module.exports = {
         return res.status(200).json(cadAluno);
     },
 
-    async index(req,res){
-        /*const idC = req.body;
-        console.log(idC)*/
-        const cadAluno = await CadAluno.findOne({
-            where: {id: req.body.idC}
+    //PEGAR OS PROJETOS DO ALUNO
+    async projetosAluno(req, res){
+        const {id} = req.body;
+        const projetos = await Projeto.findAll({
+            where: { fk_aluno: id }
         })
-        if(!cadAluno){
+        if(!projetos){
             return res.status(400).json({
-                Error:['Cadastro de aluno não encontrado']
+                Erros: ['Nenhum projeto encontrado']
             })
         }
-        return res.status(200).json(cadAluno);
+        return res.status(200).json(projetos);
     },
 
+    //DELETAR UM CADASTRO
     async delete(req, res){
         //const {idProj, matric} =  req.body;
         const cadastro = await Aluno.findByPk(req.body.id);
@@ -55,6 +56,8 @@ module.exports = {
             Sucess:['Cadastro apagado']
         })
     },
+
+    //MUDAR UM CADASTRO
     async change(req, res){
         const {id, fk_aluno, fk_projeto, form} = req.body;
         //console.log(cadastro);

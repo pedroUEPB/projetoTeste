@@ -14,7 +14,7 @@ module.exports = {
     },
     async login(req, res){
         const professor = await Professor.findOne({
-            where: { usuario: req.body.usuario },
+            where: { usuario: req.body.usuario, senha: req.body.senha },
             include:[{
                 model:Professor,
                 attributes:['id', 'fk_pessoa', 'usuario', 'senha'],

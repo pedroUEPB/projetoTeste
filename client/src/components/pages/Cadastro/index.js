@@ -1,5 +1,6 @@
 import { Formik, Field, ErrorMessage } from 'formik';
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import MaskedInput from 'react-text-mask';
 import cepMask from './cepMask';
 import cpfNumberMask from './cpfMask';
@@ -29,6 +30,7 @@ const initialStateUser = {
 const Cadastro = () => {
     const [pessoa, setPessoa] = useState(initialStatePessoa);
     const [user, setUser] = useState(initialStateUser);
+    const history = useHistory();
 
     const validateNome = () => {
         let error;
@@ -160,30 +162,55 @@ const Cadastro = () => {
     }
 
     const handleSubmitting = async (values, { setSubmitting }) => {
-        var url;
-        //console.log(user);
-        //console.log(pessoa);
-        if(localStorage.getItem('tipoUser') === "Professor"){
-            url = "http://localhost:3001/cadastroprofessor"
-        } else {
-            console.log('entrou em aluno')
-            url = "http://localhost:3001/cadastroaluno"
-        }
+        //console.log(user)
         
-        try{
-            const dados = await axios({
-                url: url,
-                method: 'POST',
-                headers: {
-                    "Accept": "application/json",
-                    "Content-Type": "application/json"
-                },
-                data:JSON.stringify({user, pessoa})
-            })
+        var url;
+        if(localStorage.getItem('tipoUser') === "Professor"){
+            url = "http://localhost:3001/verificarloginp"
+        } else {
+            url = "http://localhost:3001/verificarlogina"
+        }
+        const us = user.usuario;
+        //console.log(us);
+        const resp = await axios({
+            url: url,
+            method: 'POST',
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            },
+            data:JSON.stringify({user: us})
+        })
+        console.log(resp.data)
+        if(resp.data !== "opa"){
+            if(localStorage.getItem('tipoUser') === "Professor"){
+                url = "http://localhost:3001/professor"
+            } else {
+                url = "http://localhost:3001/aluno"
+            }
             
-            console.log(dados.config.data, dados.data);
-        } catch (err) {
-            console.log(err);
+            try{
+                const dados = await axios({
+                    url: url,
+                    method: 'POST',
+                    headers: {
+                        "Accept": "application/json",
+                        "Content-Type": "application/json"
+                    },
+                    data:JSON.stringify({user, pessoa})
+                })
+                if(!dados){
+                    alert("não cadastrado")
+                } else {
+                    localStorage.setItem("token-user", JSON.stringify({id: dados.data.al.id, fk_pessoa: dados.data.al.fk_pessoa, nome: dados.data.dadosPessoa.nome}))
+                    history.push('/listaProjetos')
+                }
+                //console.log(dados.data.al.id, dados.data.al.fk_pessoa, dados.data.dadosPessoa.nome);
+            } catch (err) {
+                console.log(err);
+            }
+        } else{
+            alert("USUÁRIO JÁ CADASTRADO")
         }
     }
 

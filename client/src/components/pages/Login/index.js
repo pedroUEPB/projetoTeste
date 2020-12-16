@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 
 import { Formik, ErrorMessage } from 'formik';
 import { useHistory } from 'react-router-dom';
+import Axios from 'axios';
 
 const initialState = {
-    email: '',
-    password: ''
+    usuario: '',
+    senha: ''
 
 }
 
@@ -22,10 +23,37 @@ const Login = () => {
     }
     
 
-    function EnviaDados(){
-        localStorage.setItem("user",JSON.stringify(dadosLogin))
+    const logar = async () => {
+        var url;
+        if(localStorage.getItem('tipoUser') === "Professor"){
+            url = "http://localhost:3001/logarprofessor"
+        } else {
+            console.log('entrou em aluno')
+            url = "http://localhost:3001/logaraluno"
+        }
+        try{
+            const dados = await Axios({
+                url: url,
+                method: 'POST',
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json"
+                },
+                data:JSON.stringify({usuario: dadosLogin.usuario, senha: dadosLogin.senha})
+            })
+            if(!dados){
+                alert("usuário ou senha incorretos")
+            } else {
+                localStorage.setItem("token-user",JSON.stringify(dados.data))
+                history.push('/listaprojetos')
+            }
+            console.log(dados)
+        } catch (err){
+
+        }
+        //localStorage.setItem("user",JSON.stringify(dadosLogin))
         
-        history.push('/listaprojetos')
+        //history.push('/listaprojetos')
     }
     
     const handleSubmitting = async (values, { setSubmitting }) => {
@@ -65,18 +93,18 @@ const Login = () => {
                             </h1>
                         </div>
                         <div className="register-fields">
-                            <input onChange={onChange} value={dadosLogin.email} className="input" type="text" name="email" placeholder="Insira seu E-mail"/>
+                            <input onChange={onChange} value={dadosLogin.usuario} className="input" type="text" name="usuario" placeholder="Insira seu E-mail"/>
                             <div className="error-message">
-                                <ErrorMessage name="login" />
+                                <ErrorMessage name="usuario" />
                             </div>
 
                            
                             <div className="error-message">
-                            <input  onChange={onChange} value={dadosLogin.password} className="input" type="password" name="password" placeholder="Insira sua senha"/>
-                                <ErrorMessage name="password" />
+                            <input  onChange={onChange} value={dadosLogin.senha} className="input" type="password" name="senha" placeholder="Insira sua senha"/>
+                                <ErrorMessage name="senha" />
                             </div>
                         </div>
-                        <input type="submit" className="btn" value="Logar" onClick={EnviaDados} />
+                        <input type="submit" className="btn" value="Logar" onClick={logar} />
                         <input type="submit" className="btn" value="Cadastrar" onClick={toCadastro}/>
                     </div>
                 </div>

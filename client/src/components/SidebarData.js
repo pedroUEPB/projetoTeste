@@ -11,15 +11,15 @@ export const SideBarData = [
         cName: 'nav-text'
     },
     {
-        title: 'Cadastro',
-        path: '/cadastro',
-        icon: <FaIcons.FaUserPlus />,
+        title: 'Meus Dados',
+        path: '/dados',
+        icon: <FaIcons.FaAddressCard />,
         cName: 'nav-text'
     },
     {
         title: 'Projetos',
         path: '/listaprojetos',
-        icon: <FaIcons.FaElementor />,
+        icon: <FaIcons.FaTasks />,
         cName: 'nav-text'
     },
     {

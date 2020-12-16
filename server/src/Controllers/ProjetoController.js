@@ -1,6 +1,7 @@
 const Professor = require('../models/ModelProfessor');
 const Projeto = require('../models/ModelProjeto');
 const CadastroAluno = require('../models/ModelCadAluno');
+const { index } = require('./CadastroAlunoController');
 
 module.exports = {
     //create projeto
@@ -16,6 +17,17 @@ module.exports = {
 
         return res.status(200).json(dadosProjeto);
     },
+
+    async index(req, res){
+        const projetos = await Projeto.findAll();
+        if(!projetos){
+            return res.status(400).json({
+                Error:['Nenhum projeto cadastrado']
+            })
+        }
+        return res.status(200).json(projetos);
+    },
+
     //pegar projetos do professor
     async indexProfessor(req, res){
         const {fk_prof} = req.body;
@@ -33,14 +45,14 @@ module.exports = {
     //deletar projeto por id
     async delete(req, res){
         const projeto = await Projeto.findByPk(req.body.id);
-        const cadastrosAl = await CadastroAluno.findAll({
+        /*const cadastrosAl = await CadastroAluno.findAll({
             where: {fk_projeto: projeto.id}
         })
         if(cadastrosAl.length > 0){
             cadastrosAl.forEach(cadAl=>{
-                /*await*/ CadastroAluno.destroy(cadAl);
+                await CadastroAluno.destroy(cadAl);
             })
-        }
+        }*/
         await projeto.destroy();
         if(!projeto){
             return res.status(400).json({
