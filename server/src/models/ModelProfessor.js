@@ -31,7 +31,7 @@ class  Professor extends Model{
     }
    static associate(models){
        this.belongsTo(models, {foreignKey:'fk_pessoa'})
-       this.hasMany(models, {foreignKey:'fk_professor'})
+       //this.hasMany(models, {foreignKey:'fk_professor'})
    }
     
 }

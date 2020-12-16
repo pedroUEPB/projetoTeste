@@ -24,12 +24,24 @@ module.exports = {
         });
         if (professor === null) {
           console.log('Not found!');
-        } /*else {
-          console.log(professor instanceof Professor); // true
-          console.log(professor);
-          console.log(professor.Pessoa); // 'My Title'
-        }*/
-        //const dt = {id: professor.id, fk_pessoa: professor.fk_pessoa, nome: professor.Pessoa.nome};
+        }
         return res.status(200).json({id: professor.id, fk_pessoa: professor.fk_pessoa, nome: professor.Pessoa.nome});
+    },
+
+    async index(req, res){
+        const { idPr, idP } = req.body;
+        const pr = await Professor.findByPk(idPr);
+        if(!pr){
+            return res.status(400).json({
+                Error:['Professor não encontrado']
+            })
+        }
+        const p = await Pessoa.findByPk(idP);
+        if(!p){
+            return res.status(400).json({
+                Error:['Professor não encontrado']
+            })
+        }
+        return res.status(200).json({pr, p})
     }
 }

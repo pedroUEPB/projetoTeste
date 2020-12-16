@@ -66,15 +66,17 @@ module.exports = {
     },
     //deletar professor por id
     async deleteProfessor(req, res){
-        const professor = await Professor.findByPk(req.body.id);
-        const pess = await Pessoa.findByPk(req.body.fk_pessoa);
-        await Professor.destroy(professor);
+        const {id, fk_pessoa} = req.body;
+        console.log(id);
+        const professor = await Professor.findByPk(id);
+        const pess = await Pessoa.findByPk(fk_pessoa);
+        /*await professor.destroy();
         if(!professor){
             return res.status(400).json({
                 Error:['Não foi possivel deletar o projeto']
             })
-        }
-        await Pessoa.destroy(pess);
+        }*/
+        await pess.destroy();
         return res.status(200).json({
             Sucess:['Removido com sucesso']
         })
@@ -91,17 +93,20 @@ module.exports = {
             })
         }
         await pess.save(pessoa);
-        return res.status(200).json()
+        if(!pess){
+            return res.status(400).json({
+                Error:['Não foi possivel editar pessoa']
+            })
+        }
+        return res.status(200).json(pess)
     },
     //deletar aluno por id
     async deleteAluno(req, res){
-        const aluno = await Aluno.findByPk(req.body.id);
         const pessoa = await Pessoa.findByPk(req.body.fk_pessoa);
-        await aluno.destroy();
         await pessoa.destroy();
-        if(!aluno){
+        if(!pessoa){
             return res.status(400).json({
-                Error:['Não foi possivel deletar o aluno']
+                Error:['Erro ao remover']
             })
         }
         return res.status(200).json({
@@ -111,6 +116,7 @@ module.exports = {
     //put aluno
     async changeAluno(req, res){
         const {user, pessoa} = req.body;
+        console.log(user);
         const aluno = await Aluno.findByPk(user.id);
         const pess = await Pessoa.findByPk(pessoa.id);
         await aluno.save(user);
@@ -120,6 +126,11 @@ module.exports = {
             })
         }
         await pess.save(pessoa);
+        if(!pess){
+            return res.status(400).json({
+                Error:['Não foi possivel editar pessoa']
+            })
+        }
         return res.status(200).json(aluno)
     }
 

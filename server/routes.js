@@ -15,27 +15,30 @@ const route = express.Router();
 //Cadastro Alunos
 route.post('/cadastroprojeto', CadastroAlunoController.store);
 route.get('/cadastroprojeto', CadastroAlunoController.index);
+route.put('/cadastroprojeto', CadastroAlunoController.change);
 route.delete('/cadastroprojeto', CadastroAlunoController.delete);
 
+//Professores
+route.post('/professor', PessoasController.storeProfessor);
+route.get('/professor', ProfessorController.index);
+route.put('/professor', PessoasController.changeProfessor);
+route.delete('/professor', PessoasController.deleteProfessor);
 
-//User
-route.post('/users', UserControler.store)
-route.get('/users', UserControler.index)
-
-//ALunos e Professores
-route.post('/cadastroprofessor', PessoasController.storeProfessor);
-route.post('/cadastroaluno', PessoasController.storeAluno);
-route.get('/pessoas', PessoasController.index)
+//Alunos
+route.post('/aluno', PessoasController.storeAluno);
+route.get('/aluno', AlunoController.index);
+route.put('/aluno', PessoasController.changeAluno);
+route.delete('/aluno', PessoasController.deleteAluno);
 
 //login
 route.post('/logarprofessor', ProfessorController.login);
 route.post('/logaraluno', AlunoController.login);
 
 //Projeto
-route.post('/cadastrarprojeto', ProjetoController.store);
+route.post('/projeto', ProjetoController.store);
 route.get('/projetosprofessor', ProjetoController.indexProfessor);
-route.delete('/deletarprojeto', ProjetoController.delete);
-route.put('/updateprojeto', ProjetoController.change);
+route.delete('/projeto', ProjetoController.delete);
+route.put('/projeto', ProjetoController.change);
 
 
 
