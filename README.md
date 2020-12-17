@@ -1,16 +1,7 @@
-Projeto para a disciplina de Técnicas de Desenvolvimento de Interface Gráfica(TDIG)
-
-Banco de Dados(mysql)
--- ----------
--- SCHEMA
--- ----------
 create schema `projetotdig`;
 
 use `projetotdig`;
 
--- ----------
--- pessoa
--- ----------
 CREATE TABLE pessoas(
 	`id` INT NOT NULL AUTO_INCREMENT,
 	`nome` VARCHAR(50) NOT NULL,
@@ -28,9 +19,6 @@ CREATE TABLE pessoas(
 	PRIMARY KEY (`id`)
 );
 
--- ----------
--- PROFESSOR
--- ----------
 CREATE TABLE professors(
 	`id` INT NOT NULL AUTO_INCREMENT,
 	`matricula` VARCHAR(11) NOT NULL,
@@ -45,13 +33,10 @@ CREATE TABLE professors(
 	CONSTRAINT `fk_professor_pessoa`
 		FOREIGN KEY (`fk_pessoa`)
 		REFERENCES `pessoas` (`id`)
-		ON DELETE NO ACTION
+		ON DELETE CASCADE
 		ON UPDATE NO ACTION
 );
 
--- ----------
--- ALUNO
--- ----------
 CREATE TABLE alunos(
 	`id` INT NOT NULL AUTO_INCREMENT,
 	`matricula` VARCHAR(11) NOT NULL,
@@ -66,13 +51,10 @@ CREATE TABLE alunos(
 	CONSTRAINT `fk_aluno_pessoa`
 		FOREIGN KEY (`fk_pessoa`)
 		REFERENCES `pessoas` (`id`)
-		ON DELETE NO ACTION
+		ON DELETE CASCADE
 		ON UPDATE NO ACTION
 );
 
--- ----------
--- PROJETO
--- ----------
 CREATE TABLE `projetos`(
 	`id` INT NOT NULL AUTO_INCREMENT,
 	`titulo_do_projeto` VARCHAR(255) NOT NULL,
@@ -94,10 +76,7 @@ CREATE TABLE `projetos`(
 		ON UPDATE NO ACTION
 );
 
--- -----------------------------
--- CADASTRO DE ALUNO NO PROJETO
--- -----------------------------
-CREATE TABLE `cadalunos`(
+CREATE TABLE `cad_alunos`(
 	`id` INT NOT NULL AUTO_INCREMENT,
 	`fk_aluno` INT NOT NULL,
 	`fk_projeto` INT NOT NULL,
@@ -105,16 +84,16 @@ CREATE TABLE `cadalunos`(
     `created_at` DATETIME NOT NULL,
     `updated_at` DATETIME NOT NULL,
 	PRIMARY KEY (`id`),
-	INDEX `fk_cadastroaluno_aluno_idx` (`fk_aluno` ASC),
-	CONSTRAINT `fk_cadastroaluno_aluno`
+	INDEX `fk_cadaluno_aluno_idx` (`fk_aluno` ASC),
+	CONSTRAINT `fk_cadaluno_aluno`
 		FOREIGN KEY (`fk_aluno`)
 		REFERENCES `alunos` (`id`)
-		ON DELETE NO ACTION
+		ON DELETE CASCADE
 		ON UPDATE NO ACTION,
-	INDEX `fk_cadastroaluno_projeto_idx` (`fk_projeto` ASC),
-	CONSTRAINT `fk_cadastroaluno_projeto`
+	INDEX `fk_cadaluno_projeto_idx` (`fk_projeto` ASC),
+	CONSTRAINT `fk_cadaluno_projeto`
 		FOREIGN KEY (`fk_projeto`)
 		REFERENCES `projetos` (`id`)
-		ON DELETE NO ACTION
+		ON DELETE CASCADE
 		ON UPDATE NO ACTION
 );
