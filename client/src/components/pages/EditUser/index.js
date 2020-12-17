@@ -1,10 +1,10 @@
 import { Formik, Field, ErrorMessage } from 'formik';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import MaskedInput from 'react-text-mask';
-import cepMask from './cepMask';
-import cpfNumberMask from './cpfMask';
-import matriculaMask from './matriculaMask';
+import cepMask from '../Cadastro/cepMask';
+import cpfNumberMask from '../Cadastro/cpfMask';
+import matriculaMask from '../Cadastro/matriculaMask';
 import '../../../style.css';
 import axios from 'axios';
 
@@ -31,6 +31,38 @@ const Cadastro = () => {
     const [pessoa, setPessoa] = useState(initialStatePessoa);
     const [user, setUser] = useState(initialStateUser);
     const history = useHistory();
+
+    useEffect(async () => {
+        const { id, fk_pessoa} = JSON.parse(localStorage.getItem("token-user"));
+        if(localStorage.getItem("token-user")){
+            setUser({
+                ...user,
+                idU: id
+            })
+            setPessoa({
+                ...pessoa,
+                idP: fk_pessoa
+            })
+        }
+        const dados = await axios({
+            url: 'http://localhost:3001/dadosprofessor',
+            method: 'POST',
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            },
+            data:JSON.stringify({idU: id})
+        })
+
+        console.log(dados.data);
+        if(dados){
+            setUser(dados.data.user);
+            setPessoa(dados.data.pessoa);
+            //setRecebido(true);
+        }else {
+            console.log("erro")
+        }
+    }, [])
 
     const validateNome = () => {
         let error;
@@ -162,56 +194,33 @@ const Cadastro = () => {
     }
 
     const handleSubmitting = async (values, { setSubmitting }) => {
-        //console.log(user)
-        
         var url;
         if(localStorage.getItem('tipoUser') === "Professor"){
-            url = "http://localhost:3001/verificarloginp"
+            url = "http://localhost:3001/professor"
         } else {
-            url = "http://localhost:3001/verificarlogina"
+            url = "http://localhost:3001/aluno"
         }
-        const us = user.usuario;
-        //console.log(us);
-        const resp = await axios({
-            url: url,
-            method: 'POST',
-            headers: {
-                "Accept": "application/json",
-                "Content-Type": "application/json"
-            },
-            data:JSON.stringify({user: us})
-        })
-        console.log(resp.data)
-        if(resp.data !== "opa"){
-            if(localStorage.getItem('tipoUser') === "Professor"){
-                url = "http://localhost:3001/professor"
+        
+        try{
+            const dados = await axios({
+                url: url,
+                method: 'PUT',
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json"
+                },
+                data:JSON.stringify({user, pessoa})
+            })
+            if(!dados){
+                alert("não atualizado")
             } else {
-                url = "http://localhost:3001/aluno"
+                console.log(dados.data)
+                console.log("entrou");
+                history.push("/dados")
             }
-            
-            try{
-                const dados = await axios({
-                    url: url,
-                    method: 'POST',
-                    headers: {
-                        "Accept": "application/json",
-                        "Content-Type": "application/json"
-                    },
-                    data:JSON.stringify({user, pessoa})
-                })
-                if(!dados){
-                    alert("não cadastrado")
-                } else {
-                    console.log(dados.data)
-                    localStorage.setItem("token-user", JSON.stringify({id: dados.data.usr.id, fk_pessoa: dados.data.usr.fk_pessoa}))
-                    history.push('/listaProjetos')
-                }
-                //console.log(dados.data.al.id, dados.data.al.fk_pessoa, dados.data.dadosPessoa.nome);
-            } catch (err) {
-                console.log(err);
-            }
-        } else{
-            alert("USUÁRIO JÁ CADASTRADO")
+            //console.log(dados.data.al.id, dados.data.al.fk_pessoa, dados.data.dadosPessoa.nome);
+        } catch (err) {
+            console.log(err);
         }
     }
 
@@ -224,7 +233,7 @@ const Cadastro = () => {
         }} onSubmit={handleSubmitting} render={({handleBlur, handleSubmit, isSubmitting, setFieldValue }) => (
             <form onSubmit={handleSubmit}>
                 <div className="wrapper">
-                    <div className="reg-form" onSubmit={handleSubmit}>
+                    <div className="reg-form">
                         <h1 className="text">Cadastro de usuário</h1>
                         <div className="register-fields">
                             <Field type="text" className="input" value={pessoa.nome} name="nome" placeholder="Nome completo*" autoComplete="off"
@@ -374,14 +383,7 @@ const Cadastro = () => {
                                 </Field>
                             </div>
                             
-                            <Field type="text" className="input" value={user.usuario} name="usuario" placeholder="Usuário*" autoComplete="off"
-                                validate={validateUsuario}
-                                onBlur={handleBlur}
-                                onChange={onChangeUser}
-                            />
-                            <div className="error-message">
-                                <ErrorMessage name="usuario" />
-                            </div>
+                            <label className="input">{user.usuario}</label>
 
                             <Field type="password" className="input" value={user.senha} name="senha" placeholder="Senha*" autoComplete="off"
                                 validate={validateSenha}
@@ -393,7 +395,7 @@ const Cadastro = () => {
                             </div>
 
                         </div>
-                        <input type="submit" className="btn" value="Cadastrar" disable={isSubmitting} />
+                        <input type="submit" className="btn" value="Editar" disable={isSubmitting} />
                     </div>
                 </div>
             </form>

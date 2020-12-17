@@ -84,19 +84,19 @@ module.exports = {
         const { user, pessoa } = req.body;
         const professor = await Professor.findByPk(user.id);
         const pess = await Pessoa.findByPk(pessoa.id);
-        await professor.save(user);
+        await professor.update(user);
         if (!professor) {
             return res.status(400).json({
                 Error: ['Não foi possivel editar o aluno']
             })
         }
-        await pess.save(pessoa);
+        await pess.update(pessoa);
         if (!pess) {
             return res.status(400).json({
                 Error: ['Não foi possivel editar pessoa']
             })
         }
-        return res.status(200).json(pess)
+        return res.status(200).json(professor)
     },
     //deletar aluno por id
     async deleteAluno(req, res) {
@@ -117,19 +117,19 @@ module.exports = {
         console.log(user);
         const aluno = await Aluno.findByPk(user.id);
         const pess = await Pessoa.findByPk(pessoa.id);
-        await aluno.save(user);
+        await aluno.update(user);
         if (!aluno) {
             return res.status(400).json({
                 Error: ['Não foi possivel editar o aluno']
             })
         }
-        await pess.save(pessoa);
+        await pess.update(pessoa);
         if (!pess) {
             return res.status(400).json({
                 Error: ['Não foi possivel editar pessoa']
             })
         }
-        return res.status(200).json(aluno)
+        return res.status(200).json(aluno, pess)
     }
     
 

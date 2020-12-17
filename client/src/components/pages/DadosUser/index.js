@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 
 const initialStatePessoa = {
@@ -28,6 +29,7 @@ const MeusDados = () =>{
     const [dadosUser, setDadosUser] = useState(initialStateUser);
     const [dadosPessoa, setDadosPessoa] = useState(initialStatePessoa);
     const [recebido, setRecebido] = useState(false);
+    const history = useHistory();
 
     useEffect(async () => {
         const { id, fk_pessoa} = JSON.parse(localStorage.getItem("token-user"));
@@ -41,10 +43,6 @@ const MeusDados = () =>{
                 idP: fk_pessoa
             })
         }
-        console.log(id)
-        console.log(fk_pessoa)
-        console.log(dadosUser.idU)
-        console.log(dadosPessoa.idP)
         const dados = await axios({
             url: 'http://localhost:3001/dadosprofessor',
             method: 'POST',
@@ -68,18 +66,60 @@ const MeusDados = () =>{
     }, [])
 
     const deleteAccount = async () => {
-        /*var url;
+        var url;
+        var continuar = true;
+        const { id, fk_pessoa } = JSON.parse(localStorage.getItem("token-user"));
         if(localStorage.getItem('tipoUser') === "Professor"){
-            url = "http://localhost:3001/professor"
-        } else {
-            console.log('entrou em aluno')
-            url = "http://localhost:3001/aluno"
-        }
-        try{
-            const resp = await axios({
-
+            url = "http://localhost:3001/projetosprofessor"
+            continuar = false;
+            const isProject = await axios({
+                url: url,
+                method: 'POST',
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json"
+                },
+                data:JSON.stringify({id: id, fk_pessoa: fk_pessoa})
             })
+            if(!isProject){
+                continuar = true;
+                console.log("manda bala")
+            } else {
+                alert("VOCÊ AINDA TEM PROJETO(S) CADASTRADO(S)!");
+            }
+        }
+        /*
+        if(continuar){
+            if(localStorage.getItem('tipoUser') === "Professor"){
+                url = "http://localhost:3001/professor"
+            } else {
+                console.log('entrou em aluno')
+                url = "http://localhost:3001/aluno"
+            }
+            try{
+                const resp = await axios({
+                    url: url,
+                    method: 'DELETE',
+                    headers: {
+                        "Accept": "application/json",
+                        "Content-Type": "application/json"
+                    },
+                    data:JSON.stringify({id: id, fk_pessoa: fk_pessoa})
+                })
+                if(resp){
+                    localStorage.removeItem("token-user");
+                    localStorage.removeItem("tipoUser");
+                    history.push("/")
+                }
+            } catch (err){
+                console.log(err)
+            }
         }*/
+        continuar = true;
+    }
+
+    const editarU = () =>{
+        history.push("/editardados")
     }
 
     return (
@@ -116,7 +156,7 @@ const MeusDados = () =>{
                 <h3 className="text">{dadosPessoa.uf}</h3>
                 <label className="text">Usuario:</label>
                 <h3 className="text">{dadosUser.usuario}</h3>
-                <button className="btn">Editar Dados</button>
+                <button className="btn" onClick={editarU}>Editar Dados</button>
                 <button className="btn" onClick={deleteAccount}>Excluir Conta</button>
             </div>}
         </div>

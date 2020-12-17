@@ -11,7 +11,7 @@ const initState = {
     palavra_chave2: '',
     palavra_chave3: '',
     url_documento: '',
-    fk_professor: JSON.parse(localStorage.getItem('token-user')).id
+    fk_professor: ''
 }
 
 const CadProjeto = () => {
@@ -44,6 +44,11 @@ const CadProjeto = () => {
     }
 
     const handleSubmitting = async (values, { setSubmitting }) => {
+        const id = JSON.parse(localStorage.getItem('token-user')).id
+        setProjeto({
+            ...projeto,
+            fk_professor: id
+        })
         console.log(projeto);
         const dados = await axios({
             url: "http://localhost:3001/projeto",
