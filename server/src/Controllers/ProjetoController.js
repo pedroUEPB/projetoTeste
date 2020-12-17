@@ -1,12 +1,10 @@
 const Professor = require('../models/ModelProfessor');
-const Projeto = require('../models/ModelProjeto');
+const Projeto = require('../models/ModelProjeto')
 const CadastroAluno = require('../models/ModelCadAluno');
-const { index } = require('./CadastroAlunoController');
 
 module.exports = {
     //create projeto
     async store(req, res) {
-
         const dadosProjeto = await Projeto.create(req.body)
 
         if (!dadosProjeto) {

@@ -14,11 +14,7 @@ import Home from './components/pages/Home';
 import ListaProjetos from './components/pages/ListaProjetos'
 
 import './components/pages/About/styleAbout.css';
-import './components/pages/Lista/styleLista.css';
-const initialState = {
-    email: 'demetrio@gmail.com',
-    password: '123456'
-}
+import './components/pages/ListaProjetos/styleLista.css';
 
 
 //<Route path="/" exact component={List} />

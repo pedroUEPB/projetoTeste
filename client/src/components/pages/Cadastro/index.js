@@ -224,6 +224,7 @@ const Cadastro = () => {
             <form onSubmit={handleSubmit}>
                 <div className="wrapper">
                     <div className="reg-form" onSubmit={handleSubmit}>
+                        <h1 className="text">Cadastro de usuário</h1>
                         <div className="register-fields">
                             <Field type="text" className="input" value={pessoa.nome} name="nome" placeholder="Nome completo*" autoComplete="off"
                                 validate={validateNome}

@@ -2,11 +2,6 @@ import React, {useEffect, useState} from 'react'
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 
-const initialState = {
-    email: 'demetrio@gmail.com',
-    password: '123456'
-}
-
 const ListaProjetos = () => {
     
     const [projetos, setProjetos] = useState([]);
@@ -20,13 +15,16 @@ const ListaProjetos = () => {
     }*/
 
     async function preencherLista(){
+        var dd
          const dados = await axios({
             url: "http://localhost:3001/projeto",
             method: 'GET'
         })
         if(dados){
-            console.log(dados)
-            setProjetos(dados);
+            //dd = JSON.stringify(dados.data);
+            console.log(dados.data)
+            setProjetos(JSON.stringify(dados));
+            //console.log(projetos);
         }
     }
 
@@ -51,15 +49,6 @@ const ListaProjetos = () => {
 
     },[])
 
-    /*useEffect(()=>{
-
-        if(localStorage.getItem("user")){
-            return setDadosLogin(localStorage.getItem("user"))
-        } 
-        return
-        
-    },[])*/
-
     const listar = () =>{
         return(
             projetos.map(projeto => (
@@ -83,17 +72,17 @@ const ListaProjetos = () => {
             <div className="reg-form">
                 <h1 className="text">Todos os Projetos</h1>
                 <table className="content-table">
-                    <thread>
-                    <tr>
-                        <th >Id</th>
-                        <th>Titulo</th>
-                        <th>Area</th>
-                        <th>URL</th>
-                        <th>Responsável</th>
-                    </tr>
-                    </thread>
+                    <thead>
+                        <tr>
+                            <th >Id</th>
+                            <th>Titulo</th>
+                            <th>Area</th>
+                            <th>URL</th>
+                            <th>Responsável</th>
+                        </tr>
+                    </thead>
                     <tbody>
-                        {listar}
+                        
                     </tbody>
                 </table>
                 <button className="btn" onClick={cadastrar}>Criar Projeto</button>
