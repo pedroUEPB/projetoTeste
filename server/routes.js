@@ -40,7 +40,7 @@ route.post('/logaraluno', AlunoController.login);
 //Projeto
 route.post('/projeto', ProjetoController.store);
 route.get('/projeto', ProjetoController.index);
-route.get('/projetosprofessor', ProjetoController.indexProfessor);
+route.post('/projetosprofessor', ProjetoController.indexProfessor);
 route.delete('/projeto', ProjetoController.delete);
 route.put('/projeto', ProjetoController.change);
 

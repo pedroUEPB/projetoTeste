@@ -19,7 +19,18 @@ module.exports = {
     },
 
     async index(req, res) {
-        const projetos = await Projeto.findAll();
+        const projetos = await Projeto.findAll({
+            include: [{
+                //where: {id: projeto.fk_professor},
+                association: 'Professor', required: true,
+                attributes: ['fk_pessoa'],
+                include: [{
+                    //where: {id: fk_pessoa},
+                    association: 'Pessoa', required: true,
+                    attributes: ['nome']
+                }]
+            }]
+        });
         if (!projetos) {
             return res.status(400).json({
                 Error: ['Nenhum projeto cadastrado']
@@ -30,10 +41,10 @@ module.exports = {
 
     //pegar projetos do professor
     async indexProfessor(req, res) {
-        const { fk_prof } = req.body;
+        const { id } = req.body;
         //console.log(fk_prof);
         const projetos = await Projeto.findAll({
-            where: { fk_professor: fk_prof }
+            where: { fk_professor: id }
         });
         if (!projetos) {
             return res.status(400).json({

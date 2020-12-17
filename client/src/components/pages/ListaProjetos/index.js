@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import { useHistory } from 'react-router-dom';
+import axios from 'axios';
 
 const initialState = {
     email: 'demetrio@gmail.com',
@@ -10,18 +11,27 @@ const ListaProjetos = () => {
     
     const [projetos, setProjetos] = useState([]);
     const [dadosLogin, setDadosLogin] = useState(false);
-    const [validaLogin, setValidaLogin] = useState(false)
+    //const [validaLogin, setValidaLogin] = useState(false)
     const history = useHistory();
-    function Sair(){
+
+    /*function Sair(){
         localStorage.removeItem("user")
         setValidaLogin(false)
+    }*/
+
+    async function preencherLista(){
+         const dados = await axios({
+            url: "http://localhost:3001/projeto",
+            method: 'GET'
+        })
+        if(dados){
+            console.log(dados)
+            setProjetos(dados);
+        }
     }
 
-
     useEffect(()=>{
-
-        
-        if(dadosLogin){
+        /*if(dadosLogin){
             
             const dadosLoginObj = JSON.parse(dadosLogin)
             
@@ -35,26 +45,47 @@ const ListaProjetos = () => {
                     alert("Email ou senha incorretos")
                 }
         }
-        /*eslint-disable */
+         */
+        {preencherLista()}
+        
+
     },[])
 
-    useEffect(()=>{
+    /*useEffect(()=>{
 
         if(localStorage.getItem("user")){
             return setDadosLogin(localStorage.getItem("user"))
         } 
         return
         
-    },[])
+    },[])*/
 
-    return validaLogin&&(
+    const listar = () =>{
+        return(
+            projetos.map(projeto => (
+                <tr key={projeto.id}>
+                    <td>{projeto.id}</td>
+                    <td>{projeto.titulo}</td>
+                    <td>{projeto.area}</td>
+                    <td>{projeto.url}</td>
+                    <td>{projeto.nomeProfessor}</td>
+                </tr>
+            ))
+        );
+    }
+
+    function cadastrar(){
+        history.push('/cadastroProjeto')
+    }
+
+    return (
         <div className="wrapper">
             <div className="reg-form">
                 <h1 className="text">Todos os Projetos</h1>
-                <table>
+                <table className="content-table">
                     <thread>
                     <tr>
-                        <th>Id</th>
+                        <th >Id</th>
                         <th>Titulo</th>
                         <th>Area</th>
                         <th>URL</th>
@@ -62,20 +93,10 @@ const ListaProjetos = () => {
                     </tr>
                     </thread>
                     <tbody>
-                        {projetos.map(projeto => (
-                            <tr key={projeto.id}>
-                                <td>{projeto.id}</td>
-                                <td>{projeto.titulo}</td>
-                                <td>{projeto.area}</td>
-                                <td>{projeto.url}</td>
-                                <td>{projeto.nomeProfessor}</td>
-                            </tr>
-                        ))}
+                        {listar}
                     </tbody>
                 </table>
-                {validaLogin&&<button>Criar Projeto</button>}
-                <br/>
-                {validaLogin&&<button onClick={Sair}>Sair</button>}
+                <button className="btn" onClick={cadastrar}>Criar Projeto</button>
             </div>
         </div>
     );
