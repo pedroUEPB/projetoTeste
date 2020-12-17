@@ -5,7 +5,8 @@ import axios from 'axios';
 const ListaProjetos = () => {
     
     const [projetos, setProjetos] = useState([]);
-    const [dadosLogin, setDadosLogin] = useState(false);
+    const [validaTabela, setValidaTabela] = useState(false);
+    //const [dadosLogin, setDadosLogin] = useState(false);
     //const [validaLogin, setValidaLogin] = useState(false)
     const history = useHistory();
 
@@ -15,8 +16,7 @@ const ListaProjetos = () => {
     }*/
 
     async function preencherLista(){
-        var dd
-         const dados = await axios({
+        const dados = await axios({
             url: "http://localhost:3001/projeto",
             method: 'GET'
         })
@@ -71,7 +71,8 @@ const ListaProjetos = () => {
         <div className="wrapper">
             <div className="reg-form">
                 <h1 className="text">Todos os Projetos</h1>
-                <table className="content-table">
+                {validaTabela &&
+                <table className="content-table" name="projetos">
                     <thead>
                         <tr>
                             <th >Id</th>
@@ -84,7 +85,7 @@ const ListaProjetos = () => {
                     <tbody>
                         
                     </tbody>
-                </table>
+                </table>}
                 <button className="btn" onClick={cadastrar}>Criar Projeto</button>
             </div>
         </div>

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
 const initialStatePessoa = {
-    idP: JSON.parse(localStorage.getItem('token-user').id),
+    idP: '',
     nome: '',
     idade: '',
     cpf: '',
@@ -15,7 +15,7 @@ const initialStatePessoa = {
     uf: ''
 }
 const initialStateUser = {
-    idU: JSON.parse(localStorage.getItem('token-user').fk_pessoa),
+    idU: '',
     matricula: '',
     curso: '',
     usuario: '',
@@ -27,8 +27,19 @@ const initialStateUser = {
 const MeusDados = () =>{
     const [dadosUser, setDadosUser] = useState(initialStateUser);
     const [dadosPessoa, setDadosPessoa] = useState(initialStatePessoa);
+    const [recebido, setRecebido] = useState(false);
 
     useEffect(() => {
+        if(localStorage.getItem("token-user")){
+            setDadosUser({
+                ...dadosUser,
+                idU: JSON.parse(localStorage.getItem("tonek-user")).id
+            })
+            setDadosPessoa({
+                ...dadosPessoa,
+                idP: JSON.parse(localStorage.getItem("token-user")).id
+            })
+        }
         const dt = async () =>{
             const dados = await axios({
                 url: 'http://localhost:3001/professor',
@@ -37,10 +48,19 @@ const MeusDados = () =>{
                     "Accept": "application/json",
                     "Content-Type": "application/json"
                 },
-                data:JSON.stringify({idU: dadosUser.idU, idP: dadosPessoa.idP})
+                data:JSON.stringify({idU: dadosUser.idU})
             })
+            if(dados){
+                console.log(dados.data);
+
+                //setRecebido(true);
+            }
         }
     }, [])
+
+    useEffect(()=>{
+        
+    },[recebido])
 
     return (
         <div className="wrapper-dadosU">

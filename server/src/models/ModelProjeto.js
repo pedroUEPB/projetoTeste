@@ -30,10 +30,6 @@ class  Projeto extends Model{
             url_documento:{
                 type: Sequelize.STRING,
                 defaultValue:'',
-            },
-            fk_professor:{
-                type: Sequelize.INTEGER,
-                allowNull: false,
             }
             
         }, {

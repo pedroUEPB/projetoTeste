@@ -30,19 +30,20 @@ module.exports = {
     },
 
     async index(req, res){
-        const { idPr, idP } = req.body;
-        const pr = await Professor.findByPk(idPr);
-        if(!pr){
+        const { idU } = req.body;
+        const dados = await Professor.findByPk(idU)
+        if(!dados){
             return res.status(400).json({
-                Error:['Professor não encontrado']
+                Error:['Usuario não encontrado']
             })
         }
-        const p = await Pessoa.findByPk(idP);
-        if(!p){
+        console.log(dados)
+        const dados2 = await Pessoa.findByPk(dados.fk_pessoa)
+        if(!dados2){
             return res.status(400).json({
-                Error:['Professor não encontrado']
+                Error:['Pessoa não encontrada']
             })
         }
-        return res.status(200).json({pr, p})
+        return res.status(200).json({dados, dados})
     }
 }

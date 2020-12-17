@@ -34,9 +34,8 @@ const Home = () => {
      }
 
     return(
-        <div>
-            <div>
-                {listaMP}
+        <div className="wrapper">
+            <div className="reg-form">
                 <h1 className="text">Meus Projetos</h1>
                 <table>
                     

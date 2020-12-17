@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
 import Routes from './routes';
+import Main from './components/pages/Main'
 //import Login from './components/pages/Login';
 //import Cadastrar from './components/pages/Cadastro';
 

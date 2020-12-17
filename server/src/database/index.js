@@ -13,11 +13,18 @@ const models = [Professor, User, Pessoa, Aluno, Projeto, CadastroAluno]
 
 
 models.forEach(models=>models.Init(connection))
-Pessoa.associate(Professor)
+//Pessoa.associate(Professor)
 Professor.associate(Pessoa)
-Aluno.associate(Pessoa);
+/*Aluno.associate(Pessoa);
 Projeto.associate(Professor);
-CadastroAluno.associate(Projeto, Aluno);
+CadastroAluno.associate(Projeto, Aluno);*/
+
+Pessoa.associate(Professor);
+Pessoa.associate(Aluno);
+Professor.associate(Projeto);
+Projeto.associate(Professor);
+Projeto.associate(CadastroAluno);
+Aluno.associate(CadastroAluno);
 
 
 

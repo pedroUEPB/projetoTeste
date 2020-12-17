@@ -42,7 +42,6 @@ class  Pessoa extends Model{
     }
     static associate(models){
         this.hasOne(models, {foreignKey:'fk_pessoa'})
-        //this.hasOne(models, {foreignKey:'fk_pessoa'})
     }
     
 }

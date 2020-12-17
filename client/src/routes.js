@@ -27,7 +27,7 @@ function Routes(){
 
     return(
         <Router history={history}>
-            <NavBar/>
+            
             <Switch>
                 
                 <Route path="/" exact component={Main} />
@@ -39,7 +39,7 @@ function Routes(){
                 <Route path="/cadastro" component={Cadastro} />
                 <Route path="/about" component={About} />
             </Switch>
-            
+            <NavBar/>
             
         </Router>
     );
