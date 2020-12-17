@@ -63,11 +63,9 @@ const MeusDados = () =>{
             console.log(dadosPessoa)
             setRecebido(true);
         }else {
-            console.log("porraa")
+            console.log("erro")
         }
     }, [])
-
-    useEffect(()=>{},[recebido])
 
     return (
         <div className="wrapper-dadosU">
@@ -103,6 +101,8 @@ const MeusDados = () =>{
                 <h3 className="text">{dadosPessoa.uf}</h3>
                 <label className="text">Usuario:</label>
                 <h3 className="text">{dadosUser.usuario}</h3>
+                <button className="btn">Editar Dados</button>
+                <button className="btn">Excluir Conta</button>
             </div>}
         </div>
     );
