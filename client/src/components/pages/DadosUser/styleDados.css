@@ -1,0 +1,16 @@
+.wrapper-dadosU{
+    position: absolute;
+    margin-top: 1%;
+    width: 100%;
+    max-width: 200%;
+    padding: 0 20px;
+}
+
+.reg-form-dadosU{
+    margin:  25px auto;
+    background: rgba(0,0,0,0.8);
+    padding: 30px;
+    border-radius: 5px;
+    display: flow-root;
+    box-shadow: 0 0 10px rgba(0,0,0,0.13);
+}

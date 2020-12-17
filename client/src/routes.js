@@ -12,9 +12,11 @@ import PrivateRoute from './components/PrivateRoute';
 import Projeto from './components/pages/Projeto';
 import Home from './components/pages/Home';
 import ListaProjetos from './components/pages/ListaProjetos'
+import MeusDados from './components/pages/DadosUser'
 
 import './components/pages/About/styleAbout.css';
 import './components/pages/ListaProjetos/styleLista.css';
+import './components/pages/DadosUser/styleDados.css';
 
 
 //<Route path="/" exact component={List} />
@@ -25,6 +27,7 @@ function Routes(){
 
     return(
         <Router history={history}>
+            <NavBar/>
             <Switch>
                 
                 <Route path="/" exact component={Main} />
@@ -32,10 +35,12 @@ function Routes(){
                 <PrivateRoute path="/Home" component={Home} />
                 <PrivateRoute path="/cadastroProjeto" component={Projeto} />
                 <PrivateRoute path="/listaProjetos" component={ListaProjetos} />
+                <PrivateRoute path="/dados" component={MeusDados} />
                 <Route path="/cadastro" component={Cadastro} />
                 <Route path="/about" component={About} />
             </Switch>
-            <NavBar/>
+            
+            
         </Router>
     );
 }

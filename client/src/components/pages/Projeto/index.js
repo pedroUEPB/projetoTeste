@@ -52,7 +52,7 @@ const CadProjeto = () => {
                 "Accept": "application/json",
                 "Content-Type": "application/json"
             },
-            data:JSON.stringify({projeto})
+            data:JSON.stringify(projeto)
         })
         if(dados){
             history.push('/home')
