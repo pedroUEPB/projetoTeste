@@ -12,23 +12,16 @@ module.exports = {
         return res.status(200).json(aluno);
 
     },
-    async login(req, res) {
+    async login(req, res){
         const aluno = await Aluno.findOne({
-            where: { usuario: req.body.usuario },
-            include: [{
-                model: Pessoa,
-                attributes: ['nome']
-            }]
+            where: { usuario: req.body.usuario, senha: req.body.senha }
         });
-        if (aluno === null) {
-            console.log('Not found!');
-        } /*else {
-          console.log(aluno instanceof Aluno); // true
-          console.log(aluno);
-          console.log(aluno.Pessoa); // 'My Title'
-        }*/
-        //const dt = {id: aluno.id, aluno: professor.fk_pessoa, nome: aluno.Pessoa.nome};
-        return res.status(200).json({ id: aluno.id, fk_pessoa: aluno.fk_pessoa, nome: aluno.Pessoa.nome });
+        if (!aluno) {
+            return res.status(400).json({
+                Error:['Não cadastrado']
+            })
+        }
+        return res.status(200).json({id: aluno.id, fk_pessoa: aluno.fk_pessoa});
     },
 
     async index(req, res) {
