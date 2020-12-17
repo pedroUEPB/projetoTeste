@@ -67,6 +67,21 @@ const MeusDados = () =>{
         }
     }, [])
 
+    const deleteAccount = async () => {
+        /*var url;
+        if(localStorage.getItem('tipoUser') === "Professor"){
+            url = "http://localhost:3001/professor"
+        } else {
+            console.log('entrou em aluno')
+            url = "http://localhost:3001/aluno"
+        }
+        try{
+            const resp = await axios({
+
+            })
+        }*/
+    }
+
     return (
         <div className="wrapper-dadosU">
             {recebido && <div className="reg-form">
@@ -102,7 +117,7 @@ const MeusDados = () =>{
                 <label className="text">Usuario:</label>
                 <h3 className="text">{dadosUser.usuario}</h3>
                 <button className="btn">Editar Dados</button>
-                <button className="btn">Excluir Conta</button>
+                <button className="btn" onClick={deleteAccount}>Excluir Conta</button>
             </div>}
         </div>
     );
