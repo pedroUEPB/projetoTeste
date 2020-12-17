@@ -29,42 +29,49 @@ const MeusDados = () =>{
     const [dadosPessoa, setDadosPessoa] = useState(initialStatePessoa);
     const [recebido, setRecebido] = useState(false);
 
-    useEffect(() => {
+    useEffect(async () => {
+        const { id, fk_pessoa} = JSON.parse(localStorage.getItem("token-user"));
         if(localStorage.getItem("token-user")){
             setDadosUser({
                 ...dadosUser,
-                idU: JSON.parse(localStorage.getItem("tonek-user")).id
+                idU: id
             })
             setDadosPessoa({
                 ...dadosPessoa,
-                idP: JSON.parse(localStorage.getItem("token-user")).id
+                idP: fk_pessoa
             })
         }
-        const dt = async () =>{
-            const dados = await axios({
-                url: 'http://localhost:3001/professor',
-                method: 'GET',
-                headers: {
-                    "Accept": "application/json",
-                    "Content-Type": "application/json"
-                },
-                data:JSON.stringify({idU: dadosUser.idU})
-            })
-            if(dados){
-                console.log(dados.data);
+        console.log(id)
+        console.log(fk_pessoa)
+        console.log(dadosUser.idU)
+        console.log(dadosPessoa.idP)
+        const dados = await axios({
+            url: 'http://localhost:3001/dadosprofessor',
+            method: 'POST',
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            },
+            data:JSON.stringify({idU: id})
+        })
 
-                //setRecebido(true);
-            }
+        console.log(dados.data);
+        if(dados){
+            setDadosUser(dados.data.user);
+            setDadosPessoa(dados.data.pessoa);
+            console.log(dadosUser)
+            console.log(dadosPessoa)
+            setRecebido(true);
+        }else {
+            console.log("porraa")
         }
     }, [])
 
-    useEffect(()=>{
-        
-    },[recebido])
+    useEffect(()=>{},[recebido])
 
     return (
         <div className="wrapper-dadosU">
-            <div className="reg-form">
+            {recebido && <div className="reg-form">
                 <label className="text">Nome:</label>
                 <br/>
                 <h3 className="text">{dadosPessoa.nome}</h3>
@@ -74,8 +81,8 @@ const MeusDados = () =>{
                 <label className="text">Curso:</label>
                 <br/>
                 <h3 className="text">{dadosUser.curso}</h3>
-            </div>
-            <div className="reg-form-dadosU">
+            </div>}
+            {recebido && <div className="reg-form-dadosU">
                 <label className="text">Idade:</label>
                 <h3 className="text">{dadosPessoa.idade}</h3>
                 <label className="text">CPF:</label>
@@ -96,7 +103,7 @@ const MeusDados = () =>{
                 <h3 className="text">{dadosPessoa.uf}</h3>
                 <label className="text">Usuario:</label>
                 <h3 className="text">{dadosUser.usuario}</h3>
-            </div>
+            </div>}
         </div>
     );
 }

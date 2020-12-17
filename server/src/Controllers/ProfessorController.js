@@ -15,35 +15,32 @@ module.exports = {
     },
     async login(req, res){
         const professor = await Professor.findOne({
-            where: { usuario: req.body.usuario, senha: req.body.senha },
-            include:[{
-                model:Professor,
-                attributes:['id', 'fk_pessoa', 'usuario', 'senha'],
-                model:Pessoa,
-                attributes:['nome']
-            }]
+            where: { usuario: req.body.usuario, senha: req.body.senha }
         });
-        if (professor === null) {
-          console.log('Not found!');
+        if (!professor) {
+            return res.status(400).json({
+                Error:['Não cadastrado']
+            })
         }
-        return res.status(200).json({id: professor.id, fk_pessoa: professor.fk_pessoa, nome: professor.Pessoa.nome});
+        return res.status(200).json({id: professor.id, fk_pessoa: professor.fk_pessoa});
     },
 
     async index(req, res){
         const { idU } = req.body;
-        const dados = await Professor.findByPk(idU)
-        if(!dados){
+        //console.log(req.body);
+        const user = await Professor.findByPk(idU)
+        if(!user){
             return res.status(400).json({
                 Error:['Usuario não encontrado']
             })
         }
-        console.log(dados)
-        const dados2 = await Pessoa.findByPk(dados.fk_pessoa)
-        if(!dados2){
+        const pessoa = await Pessoa.findByPk(user.fk_pessoa)
+        //console.log(pessoa)
+        if(!pessoa){
             return res.status(400).json({
                 Error:['Pessoa não encontrada']
             })
         }
-        return res.status(200).json({dados, dados})
+        return res.status(200).json({user, pessoa})
     }
 }

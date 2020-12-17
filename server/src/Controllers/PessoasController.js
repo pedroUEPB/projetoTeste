@@ -8,24 +8,22 @@ module.exports = {
         const { user, pessoa } = req.body
         const dadosPessoa = await Pessoa.create(pessoa)
 
-
-
         if (!dadosPessoa) {
             return res.status(400).json({
                 Error: ['Não foi possível criar um pessoa']
             })
         }
         const { id } = dadosPessoa;
-        const professor = await Professor.create({ ...user, fk_pessoa: id })
+        const usr = await Professor.create({ ...user, fk_pessoa: id })
 
 
-        if (!professor) {
+        if (!usr) {
             return res.status(400).json({
                 Error: ['Professor não foi criado']
             })
         }
 
-        return res.status(200).json({ dadosPessoa, professor });
+        return res.status(200).json({ dadosPessoa, usr });
     },
     //cadastro aluno
     async storeAluno(req, res) {
@@ -41,16 +39,16 @@ module.exports = {
             })
         }
         const { id } = dadosPessoa;
-        const al = await Aluno.create({ ...user, fk_pessoa: id })
+        const usr = await Aluno.create({ ...user, fk_pessoa: id })
 
 
-        if (!al) {
+        if (!usr) {
             return res.status(400).json({
                 Error: ['Professor não foi criado']
             })
         }
 
-        return res.status(200).json({ dadosPessoa, al });
+        return res.status(200).json({ dadosPessoa, usr });
     },
     async index(req, res) {
 

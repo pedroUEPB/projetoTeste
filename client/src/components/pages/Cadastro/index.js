@@ -202,7 +202,8 @@ const Cadastro = () => {
                 if(!dados){
                     alert("não cadastrado")
                 } else {
-                    localStorage.setItem("token-user", JSON.stringify({id: dados.data.al.id, fk_pessoa: dados.data.al.fk_pessoa, nome: dados.data.dadosPessoa.nome}))
+                    console.log(dados.data)
+                    localStorage.setItem("token-user", JSON.stringify({id: dados.data.usr.id, fk_pessoa: dados.data.usr.fk_pessoa}))
                     history.push('/listaProjetos')
                 }
                 //console.log(dados.data.al.id, dados.data.al.fk_pessoa, dados.data.dadosPessoa.nome);

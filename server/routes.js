@@ -21,7 +21,7 @@ route.delete('/cadastroprojeto', CadastroAlunoController.delete);
 
 //Professores
 route.post('/professor', PessoasController.storeProfessor);
-route.get('/professor', ProfessorController.index);
+route.post('/dadosprofessor', ProfessorController.index);
 route.post('/verificarloginp', LoginController.indexLoginProfessor)
 route.put('/professor', PessoasController.changeProfessor);
 route.delete('/professor', PessoasController.deleteProfessor);
