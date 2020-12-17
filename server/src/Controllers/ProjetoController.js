@@ -43,7 +43,7 @@ module.exports = {
         const projetos = await Projeto.findAll({
             where: { fk_professor: id }
         });
-        if (!projetos) {
+        if (projetos) {
             return res.status(400).json({
                 Error: ['Nenhum projeto encontrado']
             })
