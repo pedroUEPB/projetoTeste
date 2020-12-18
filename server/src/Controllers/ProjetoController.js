@@ -1,4 +1,5 @@
-const Projeto = require('../models/ModelProjeto')
+const Projeto = require('../models/ModelProjeto');
+const { indexLoginProfessor } = require('./LoginController');
 
 module.exports = {
     //create projeto
@@ -36,6 +37,27 @@ module.exports = {
         return res.status(200).json(projetos);
     },
 
+    async indexOne(req, res){
+        const {id} = req.body;
+        console.log(id);
+        const projeto = await Projeto.findOne({
+            where: {id: id},
+            /*include:[{
+                association: 'Professor', required: true,
+                attributes:['fk_professor'],
+                include:[{
+                    association: 'Pessoa', required: true,
+                    attributes:['nome']
+                }]
+            }]*/
+        })
+        if(!projeto){
+            return res.status(400).json({
+                Error:['Não encontrado']
+            })
+        }
+        return res.status(200).json(projeto);
+    },
     //pegar projetos do professor
     async indexProfessor(req, res) {
         const { id } = req.body;
@@ -43,9 +65,9 @@ module.exports = {
         const projetos = await Projeto.findAll({
             where: { fk_professor: id }
         });
-        if (projetos) {
+        if (!projetos) {
             return res.status(400).json({
-                Error: ['Nenhum projeto encontrado']
+                Error:['Não encontrado']
             })
         }
         return res.status(200).json(projetos);

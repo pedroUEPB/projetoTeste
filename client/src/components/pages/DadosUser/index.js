@@ -53,7 +53,7 @@ const MeusDados = () =>{
             data:JSON.stringify({idU: id})
         })
 
-        console.log(dados.data);
+        //console.log(dados.data);
         if(dados){
             setDadosUser(dados.data.user);
             setDadosPessoa(dados.data.pessoa);
@@ -64,6 +64,15 @@ const MeusDados = () =>{
             console.log("erro")
         }
     }, [])
+
+    function isEmpty(obj) {
+        for(var prop in obj) {
+            if(obj.hasOwnProperty(prop))
+                return false;
+        }
+    
+        return true;
+    }
 
     const deleteAccount = async () => {
         var url;
@@ -81,14 +90,17 @@ const MeusDados = () =>{
                 },
                 data:JSON.stringify({id: id, fk_pessoa: fk_pessoa})
             })
-            if(!isProject){
+            //console.log()
+            //const dd = JSON.parse(isProject.data);
+            //console.log(dd);
+
+            if(isEmpty(isProject.data)){
                 continuar = true;
                 console.log("manda bala")
             } else {
                 alert("VOCÊ AINDA TEM PROJETO(S) CADASTRADO(S)!");
             }
         }
-        /*
         if(continuar){
             if(localStorage.getItem('tipoUser') === "Professor"){
                 url = "http://localhost:3001/professor"
@@ -114,8 +126,7 @@ const MeusDados = () =>{
             } catch (err){
                 console.log(err)
             }
-        }*/
-        continuar = true;
+        }
     }
 
     const editarU = () =>{

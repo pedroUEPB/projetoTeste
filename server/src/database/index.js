@@ -22,7 +22,7 @@ CadastroAluno.associate(Projeto, Aluno);*/
 Pessoa.associate(Professor);
 Pessoa.associate(Aluno);
 Professor.associate(Projeto);
-Projeto.associate(Professor);
+//Projeto.associate(Professor);
 Projeto.associate(CadastroAluno);
 Aluno.associate(CadastroAluno);
 

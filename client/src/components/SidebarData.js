@@ -23,6 +23,12 @@ export const SideBarData = [
         cName: 'nav-text'
     },
     {
+        title: 'Meus projetos',
+        path: '/Home',
+        icon: <FaIcons.FaTasks />,
+        cName: 'nav-text'
+    },
+    {
         title: 'Sobre',
         path: '/about',
         icon: <IoIcons.IoMdHelpCircle />,

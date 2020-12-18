@@ -14,6 +14,7 @@ import Home from './components/pages/Home';
 import ListaProjetos from './components/pages/ListaProjetos'
 import MeusDados from './components/pages/DadosUser'
 import EditUser from './components/pages/EditUser';
+import DadosProjeto from './components/pages/DadosProjeto';
 
 import './components/pages/About/styleAbout.css';
 import './components/pages/ListaProjetos/styleLista.css';
@@ -38,6 +39,7 @@ function Routes(){
                 <PrivateRoute path="/listaProjetos" component={ListaProjetos} />
                 <PrivateRoute path="/dados" component={MeusDados} />
                 <PrivateRoute path="/editarDados" component={EditUser} />
+                <PrivateRoute path="/dadosProjeto" component={DadosProjeto} />
                 <Route path="/cadastro" component={Cadastro} />
                 <Route path="/about" component={About} />
             </Switch>

@@ -11,12 +11,12 @@ const initState = {
     palavra_chave2: '',
     palavra_chave3: '',
     url_documento: '',
-    fk_professor: ''
+    fk_professor: 0
 }
 
 const CadProjeto = () => {
 
-    const [projeto, setProjeto] = useState(initState);
+    const [projeto, setProjeto] = useState();
     const history = useHistory();
 
     const validateTitulo = () => {
@@ -45,6 +45,7 @@ const CadProjeto = () => {
 
     const handleSubmitting = async (values, { setSubmitting }) => {
         const id = JSON.parse(localStorage.getItem('token-user')).id
+        console.log(id);
         setProjeto({
             ...projeto,
             fk_professor: id
