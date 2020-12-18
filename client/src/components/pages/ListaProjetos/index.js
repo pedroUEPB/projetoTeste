@@ -13,6 +13,7 @@ const initState = [{
 const ListaProjetos = () => {
     
     const [projetos, setProjetos] = useState(false);
+    const [visible, setVisible] = useState(true);
     //const [dadosLogin, setDadosLogin] = useState(false);
     //const [validaLogin, setValidaLogin] = useState(false)
     const history = useHistory();
@@ -41,6 +42,9 @@ const ListaProjetos = () => {
             //console.log(dados.data);
             setProjetos(dados.data)
             //console.log(projetos)
+            if(JSON.parse(localStorage.getItem('token-user')) === "Aluno"){
+                setVisible(false);
+            }
          } catch (err){
             console.log(err)
          }
@@ -94,7 +98,7 @@ const ListaProjetos = () => {
                         ))}
                     </tbody>
                 </table>}
-                <button className="btn" onClick={cadastrar}>Criar Projeto</button>
+                {visible && <button className="btn" onClick={cadastrar}>Criar Projeto</button>}
             </div>
         </div>
     );
